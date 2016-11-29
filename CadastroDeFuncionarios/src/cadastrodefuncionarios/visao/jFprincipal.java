@@ -40,6 +40,10 @@ public class jFprincipal extends javax.swing.JFrame {
         jTfCodDepto.setEnabled(false);
         jTfNomeDepto.setEnabled(false);
     }
+    
+    public void manipulaInterface(String modo) {
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
