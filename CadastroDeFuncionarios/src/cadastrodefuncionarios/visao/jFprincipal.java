@@ -35,14 +35,54 @@ public class jFprincipal extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         listaDepartamentos = new ArrayList<>();
-        jBtnSalvarDepto.setEnabled(false);
-        jBtnCancelarDepto.setEnabled(false);
-        jTfCodDepto.setEnabled(false);
-        jTfNomeDepto.setEnabled(false);
+        manipulaInterface("Navegar");
     }
     
     public void manipulaInterface(String modo) {
-        
+        switch(modo) 
+        {
+            case "Navegar":
+                jBtnSalvarDepto.setEnabled(false);
+                jBtnCancelarDepto.setEnabled(false);
+                jTfCodDepto.setEnabled(false);
+                jTfNomeDepto.setEnabled(false);
+                jBtnNovoDepto.setEnabled(true);
+                jBtnEditarDepto.setEnabled(false);
+                jBtnExcluirDepto.setEnabled(false);
+                break;
+            
+            case "Novo":
+                jBtnSalvarDepto.setEnabled(true);
+                jBtnCancelarDepto.setEnabled(true);
+                jTfCodDepto.setEnabled(true);
+                jTfNomeDepto.setEnabled(true);
+                jBtnNovoDepto.setEnabled(false);
+                jBtnEditarDepto.setEnabled(false);
+                jBtnExcluirDepto.setEnabled(false);
+                break;
+            
+            case "Editar":
+                jBtnSalvarDepto.setEnabled(true);
+                jBtnCancelarDepto.setEnabled(true);
+                jTfCodDepto.setEnabled(true);
+                jTfNomeDepto.setEnabled(true);
+                jBtnNovoDepto.setEnabled(true);
+                jBtnEditarDepto.setEnabled(false);
+                jBtnExcluirDepto.setEnabled(false);
+                break;
+            
+            case "Excluir":
+                jBtnSalvarDepto.setEnabled(false);
+                jBtnCancelarDepto.setEnabled(false);
+                jTfCodDepto.setEnabled(false);
+                jTfNomeDepto.setEnabled(false);
+                jBtnNovoDepto.setEnabled(true);
+                jBtnEditarDepto.setEnabled(false);
+                jBtnExcluirDepto.setEnabled(false);
+                break;
+            
+            default: System.out.println("Modo inválido");
+        }
     }
 
     /**
@@ -241,21 +281,25 @@ public class jFprincipal extends javax.swing.JFrame {
     private void jBtnNovoDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNovoDeptoActionPerformed
         jTfCodDepto.setText(null);
         jTfNomeDepto.setText(null);
-        jBtnSalvarDepto.setEnabled(true);
-        jBtnCancelarDepto.setEnabled(true);
-        jTfCodDepto.setEnabled(true);
-        jTfNomeDepto.setEnabled(true);
+        
+        manipulaInterface("Novo");
     }//GEN-LAST:event_jBtnNovoDeptoActionPerformed
 
     private void jBtnCancelarDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCancelarDeptoActionPerformed
-        jBtnSalvarDepto.setEnabled(false);
-        jBtnCancelarDepto.setEnabled(false);
+        jTfCodDepto.setText(null);
+        jTfNomeDepto.setText(null);
+        
+        manipulaInterface("Navegar");
     }//GEN-LAST:event_jBtnCancelarDeptoActionPerformed
 
     private void jBtnSalvarDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSalvarDeptoActionPerformed
         Departamento depto = new Departamento(Integer.parseInt(jTfCodDepto.getText()), jTfNomeDepto.getText());
         listaDepartamentos.add(depto);
         carregaTabelaDepartamentos();
+        
+        manipulaInterface("Navegar");
+        jTfCodDepto.setText(null);
+        jTfNomeDepto.setText(null);
     }//GEN-LAST:event_jBtnSalvarDeptoActionPerformed
 
     /**
