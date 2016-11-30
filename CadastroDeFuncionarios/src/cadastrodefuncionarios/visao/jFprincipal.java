@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class jFprincipal extends javax.swing.JFrame {
     ArrayList<Departamento> listaDepartamentos;
+    String modo;
     
     public void carregaTabelaDepartamentos() {
         DefaultTableModel modelo = new DefaultTableModel(new Object[]{"Código","Nome"},0);
@@ -35,10 +36,11 @@ public class jFprincipal extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         listaDepartamentos = new ArrayList<>();
-        manipulaInterface("Navegar");
+        modo = "Navegar";
+        manipulaInterface();
     }
     
-    public void manipulaInterface(String modo) {
+    public void manipulaInterface() {
         switch(modo) 
         {
             case "Navegar":
@@ -79,6 +81,16 @@ public class jFprincipal extends javax.swing.JFrame {
                 jBtnNovoDepto.setEnabled(true);
                 jBtnEditarDepto.setEnabled(false);
                 jBtnExcluirDepto.setEnabled(false);
+                break;
+                
+             case "Selecao":
+                jBtnSalvarDepto.setEnabled(false);
+                jBtnCancelarDepto.setEnabled(false);
+                jTfCodDepto.setEnabled(false);
+                jTfNomeDepto.setEnabled(false);
+                jBtnNovoDepto.setEnabled(true);
+                jBtnEditarDepto.setEnabled(true);
+                jBtnExcluirDepto.setEnabled(true);
                 break;
             
             default: System.out.println("Modo inválido");
@@ -133,6 +145,11 @@ public class jFprincipal extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTblDeptos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblDeptosMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTblDeptos);
@@ -208,6 +225,11 @@ public class jFprincipal extends javax.swing.JFrame {
         });
 
         jBtnEditarDepto.setText("Editar");
+        jBtnEditarDepto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnEditarDeptoActionPerformed(evt);
+            }
+        });
 
         jBtnExcluirDepto.setText("Excluir");
 
@@ -281,26 +303,56 @@ public class jFprincipal extends javax.swing.JFrame {
     private void jBtnNovoDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNovoDeptoActionPerformed
         jTfCodDepto.setText(null);
         jTfNomeDepto.setText(null);
-        
-        manipulaInterface("Novo");
+        modo = "Novo";
+        manipulaInterface();
     }//GEN-LAST:event_jBtnNovoDeptoActionPerformed
 
     private void jBtnCancelarDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCancelarDeptoActionPerformed
         jTfCodDepto.setText(null);
         jTfNomeDepto.setText(null);
-        
-        manipulaInterface("Navegar");
+        modo = "Navegar";
+        manipulaInterface();
     }//GEN-LAST:event_jBtnCancelarDeptoActionPerformed
 
     private void jBtnSalvarDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSalvarDeptoActionPerformed
-        Departamento depto = new Departamento(Integer.parseInt(jTfCodDepto.getText()), jTfNomeDepto.getText());
-        listaDepartamentos.add(depto);
+
+        if (modo.equals("Novo")) {
+            
+            Departamento depto = new Departamento(Integer.parseInt(jTfCodDepto.getText()), jTfNomeDepto.getText());
+            listaDepartamentos.add(depto);
+            
+        } else if (modo.equals("Editar")) {
+            int index = jTblDeptos.getSelectedRow();
+            listaDepartamentos.get(index).setCodigo(Integer.parseInt(jTfCodDepto.getText()));
+            listaDepartamentos.get(index).setNome(jTfNomeDepto.getText());
+        }
         carregaTabelaDepartamentos();
+        modo = "Navegar";
         
-        manipulaInterface("Navegar");
+        manipulaInterface();
         jTfCodDepto.setText(null);
         jTfNomeDepto.setText(null);
     }//GEN-LAST:event_jBtnSalvarDeptoActionPerformed
+
+    private void jTblDeptosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblDeptosMouseClicked
+        int index = jTblDeptos.getSelectedRow();
+        
+        if (index >= 0 && index < listaDepartamentos.size()) {
+            Departamento d  = listaDepartamentos.get(index);
+            jTfCodDepto.setText(String.valueOf(d.getCodigo()));
+            jTfNomeDepto.setText(d.getNome());
+            
+            modo = "Selecao";
+            
+            manipulaInterface();
+        }
+    }//GEN-LAST:event_jTblDeptosMouseClicked
+
+    private void jBtnEditarDeptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEditarDeptoActionPerformed
+        modo = "Editar";    
+        
+        manipulaInterface();
+    }//GEN-LAST:event_jBtnEditarDeptoActionPerformed
 
     /**
      * @param args the command line arguments
